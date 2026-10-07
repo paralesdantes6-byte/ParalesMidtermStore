@@ -1,92 +1,73 @@
 @model List<ParalesMidtermStore.Models.CartItem>
 
 @{
-    ViewData["Title"] = "Shopping Cart";
+    ViewData["Title"] = "Cart";
 }
 
-<h1>Shopping Cart</h1>
+<h1>Cart</h1>
 
 @if (Model.Count == 0)
 {
-    <div class="alert alert-info">
-        Your cart is empty.
-    </div>
+    <p>Your cart is empty.</p>
 
-    <a asp-controller="Products"
-       asp-action="Index"
-       class="btn btn-primary">
-        Continue Shopping
+    <a asp-controller="Products" asp-action="Index">
+        Back to Products
     </a>
 }
 else
 {
-    <table class="table table-bordered">
-        <thead>
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+            <th>Action</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
             <tr>
-                <th>Product Name</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Subtotal</th>
-                <th>Actions</th>
+                <td>@item.ProductName</td>
+                <td>₱@item.Price</td>
+
+                <td>
+                    <form asp-action="UpdateQuantity" method="post">
+                        <input type="hidden"
+                               name="id"
+                               value="@item.Id" />
+
+                        <input type="number"
+                               name="quantity"
+                               value="@item.Quantity"
+                               min="1"
+                               style="width:50px;" />
+
+                        <button type="submit">
+                            Update
+                        </button>
+                    </form>
+                </td>
+
+                <td>
+                    ₱@(item.Price * item.Quantity)
+                </td>
+
+                <td>
+                    <a asp-action="Remove"
+                       asp-route-id="@item.Id">
+                        Remove
+                    </a>
+                </td>
             </tr>
-        </thead>
-
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.ProductName</td>
-
-                    <td>₱@item.Price</td>
-
-                    <td>
-                        <form asp-action="UpdateQuantity"
-                              method="post"
-                              class="d-flex">
-
-                            <input type="hidden"
-                                   name="id"
-                                   value="@item.Id" />
-
-                            <input type="number"
-                                   name="quantity"
-                                   value="@item.Quantity"
-                                   min="1"
-                                   class="form-control"
-                                   style="width: 90px;" />
-
-                            <button type="submit"
-                                    class="btn btn-warning ms-2">
-                                Update
-                            </button>
-                        </form>
-                    </td>
-
-                    <td>
-                        ₱@(item.Price * item.Quantity)
-                    </td>
-
-                    <td>
-                        <a asp-action="Remove"
-                           asp-route-id="@item.Id"
-                           class="btn btn-danger"
-                           onclick="return confirm('Remove this item?')">
-                            Remove
-                        </a>
-                    </td>
-                </tr>
-            }
-        </tbody>
+        }
     </table>
 
-    <h3 class="text-end">
-        Total:
-        ₱@Model.Sum(item => item.Price * item.Quantity)
+    <h3>
+        Total: ₱@Model.Sum(x => x.Price * x.Quantity)
     </h3>
 
-    <a asp-controller="Products"
-       asp-action="Index"
-       class="btn btn-secondary">
+    <a asp-controller="Products" asp-action="Index">
         Continue Shopping
     </a>
 }

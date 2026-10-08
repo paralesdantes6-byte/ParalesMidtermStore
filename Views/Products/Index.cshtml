@@ -1,3 +1,4 @@
+```html
 @model IEnumerable<ParalesMidtermStore.Models.Product>
 
 @{
@@ -11,50 +12,35 @@
         <a asp-action="Create" class="btn btn-primary">+ Add Product</a>
     </p>
 
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Category</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
 
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Id</td>
-                    <td>@item.Name</td>
-                    <td>@item.Description</td>
-                    <td>₱@item.Price</td>
-                    <td>@item.Category</td>
+                        <h5>@item.Name</h5>
+                        <p>@item.Description</p>
+                        <p>Price: ₱@item.Price</p>
+                        <p>Category: @item.Category</p>
 
-                    <td>
                         <a asp-action="Edit"
                            asp-route-id="@item.Id"
-                           class="btn btn-warning">
-                            Edit
-                        </a>
+                           class="btn btn-danger btn-sm">Edit</a>
 
                         <a asp-action="Delete"
                            asp-route-id="@item.Id"
-                           class="btn btn-danger">
-                            Delete
-                        </a>
+                           class="btn btn-Danger btn-sm">Delete</a>
 
                         <a asp-controller="Cart"
                            asp-action="AddToCart"
                            asp-route-id="@item.Id"
-                           class="btn btn-success">
-                            Add to Cart
-                        </a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                           class="btn btn-success btn-sm">Add to Cart</a>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
+```
